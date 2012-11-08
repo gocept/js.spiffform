@@ -14,3 +14,17 @@ This requires integration between your web framework and ``fanstatic``,
 and making sure that the original resources (shipped in the ``resources``
 directory) are published to some URL.
 
+Git subtree of SpiffForm
+------------------------
+
+We use git `subtree`_ to get SpiffForm.
+
+.. _`subtree`: https://help.github.com/articles/working-with-subtree-merge
+
+How::
+    
+    $ git remote add -f spiffform https://github.com/lugensa/SpiffForm.git
+    $ git merge -s ours --no-commit spiffform/master
+    $ git read-tree --prefix=js/spiffform/resources/ -u spiffform/master
+    $ git commit -m "Subtree merged in js/spiffform/resources/"
+
