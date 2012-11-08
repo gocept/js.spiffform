@@ -28,3 +28,6 @@ How::
     $ git read-tree --prefix=js/spiffform/resources/ -u spiffform/master
     $ git commit -m "Subtree merged in js/spiffform/resources/"
 
+Pull changes::
+
+    $ git pull -s subtree
