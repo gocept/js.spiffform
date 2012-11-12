@@ -30,4 +30,6 @@ How::
 
 Pull changes::
 
-    $ git pull -s subtree
+    $ git pull -s subtree #this only works if we use not nested prefix name 
+    $ git pull --squash -s subtree https://github.com/lugensa/SpiffForm.git
+master
