@@ -19,4 +19,5 @@ spiffform_css = Resource(library, 'spiffform/res/spiffform.css',
 
 #i18n DE
 spiffform_de = Resource(library, 'spiffform/spiffform-de.js',
-                        depends=[spiffform, i18n])
+                        depends=[spiffform, i18n,
+                                 js.jqueryui.ui_datepicker_de])
