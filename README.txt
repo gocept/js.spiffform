@@ -1,6 +1,3 @@
-js.spiffform
-************
-
 Introduction
 ============
 

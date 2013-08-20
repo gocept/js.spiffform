@@ -4,7 +4,7 @@ CHANGES
 1.1.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Merged upstream date range.
 
 
 1.0.0 (2013-05-27)
