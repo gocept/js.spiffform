@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-1.2.0 (unreleased)
+1.2.0 (2013-08-22)
 ------------------
 
 - Merged upstream i18n fix.
