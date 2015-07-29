@@ -4,7 +4,8 @@ CHANGES
 1.3.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- added infobox (box for writing descriptive texts in HTML
+  for structuring your form)
 
 
 1.2.0 (2013-08-22)
