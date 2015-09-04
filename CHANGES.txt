@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-1.3.0 (unreleased)
+1.3.0 (2015-09-04)
 ------------------
 
 - added infobox (box for writing descriptive texts in HTML
