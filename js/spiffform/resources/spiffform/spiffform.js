@@ -1111,6 +1111,7 @@ var SpiffFormDropdownList = function() {
                 that._items.splice(index, 1);
             $(this).parent().remove();
             that.update();
+            rebuild_default_select_options();
         }
 
         // Handler for 'changed' events from the radio list.
@@ -1147,6 +1148,7 @@ var SpiffFormDropdownList = function() {
             if (index >= that._items.length)
                 that._items.push($(this).val());
             that.update();
+            rebuild_default_select_options();
         }
 
         // Appends one li to the option list.
@@ -1161,6 +1163,16 @@ var SpiffFormDropdownList = function() {
             li.find('input[type=button]').click(delete_button_clicked);
         }
 
+        function rebuild_default_select_options() {
+            var $defaultsContainer = $('#select-defaults');
+            $defaultsContainer.empty();
+            var select = that._get_select_elem();
+            $defaultsContainer.append(select);
+            select.change(function() {
+                that.select($(this).val());
+            });
+        }
+
         // Create the entries in the radio list.
         for (var i = 0, len = this._items.length; i < len || i < 2; i++)
             append_entry(this._items[i]);
@@ -1170,12 +1182,8 @@ var SpiffFormDropdownList = function() {
 
         // Initial value.
         elem.append('<div><label>' + $.i18n._('Default') + ':</label></div>');
-        var select = this._get_select_elem();
-        elem.children('div:last').append(select);
-        select.change(function() {
-            that.select($(this).val());
-        });
-
+        elem.append('<div id="select-defaults">');
+        rebuild_default_select_options();
         // Required checkbox.
         elem.append(this._get_required_checkbox());
     };
@@ -1285,6 +1293,7 @@ var SpiffFormRadioList = function() {
                 that._items.splice(index, 1);
             $(this).parent().remove();
             that.update();
+            rebuild_default_radio_options();
         }
 
         // Handler for 'changed' events from the option list.
@@ -1321,6 +1330,7 @@ var SpiffFormRadioList = function() {
             if (index >= that._items.length)
                 that._items.push($(this).val());
             that.update();
+            rebuild_default_radio_options();
         }
 
         // Appends one li to the option list.
@@ -1335,6 +1345,16 @@ var SpiffFormRadioList = function() {
             li.find('input[type=button]').click(delete_button_clicked);
         }
 
+        function rebuild_default_radio_options() {
+            var $defaultsContainer = $('#radio-defaults');
+            $defaultsContainer.empty();
+            var p = that._get_radio_elem(false);
+            $defaultsContainer.append(p);
+            p.find('input').click(function() {
+                that.select($(this).val());
+            });
+        }
+
         // Create the entries in the option list.
         for (var i = 0, len = this._items.length; i < len || i < 2; i++)
             append_entry(this._items[i]);
@@ -1344,11 +1364,8 @@ var SpiffFormRadioList = function() {
 
         // Initial value.
         elem.append('<div><label>' + $.i18n._('Default') + ':</label></div>');
-        var p = this._get_radio_elem(false);
-        elem.children('div:last').append(p);
-        p.find('input').click(function() {
-            that.select($(this).val());
-        });
+        elem.append('<div id="radio-defaults">');
+        rebuild_default_radio_options();
 
         // Required checkbox.
         elem.append(this._get_required_checkbox());
