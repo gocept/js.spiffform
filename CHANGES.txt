@@ -1,7 +1,7 @@
 CHANGES
 =======
 
-1.3.1 (unreleased)
+1.3.1 (2017-03-10)
 ------------------
 
 - make select defaults and radio buttons defaults more robust
