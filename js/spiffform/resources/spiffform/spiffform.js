@@ -220,6 +220,8 @@ var _SpiffFormObjectSerializer = function() {
     };
 };
 
+var SpiffFormObjectSerializer = new _SpiffFormObjectSerializer();
+
 var _SpiffFormJSONSerializer = function() {
     this.serialize_form = function(form) {
         return JSON.stringify(Object.getPrototypeOf(this).serialize_form(form));
@@ -304,6 +306,16 @@ var SpiffFormElement = function() {
     this.set_label = function(label) {
         this._label = label;
         this.update();
+    };
+
+    this.get_label = function() {
+        return this._label;
+    };
+
+    this.get_values = function() {
+        var data = {};
+        data[this._label] = this._value;
+        return data;
     };
 
     this.set_error = function(text) {
@@ -481,6 +493,10 @@ var SpiffFormSeparator = function() {
         return 'separator';
     };
 
+    this.get_values = function() {
+        return {};
+    };
+
     this.attach = function(div) {
         this._div = div;
         this.update();
@@ -514,7 +530,7 @@ spiffform_elements.separator = SpiffFormSeparator;
 // -------------------------------------
 var SpiffFormPartsField = function() {
     this._name = $.i18n._('Parts Field');
-    this._label = $.i18n._('Firstfield/Secondfield');
+    this._label = [$.i18n._('Firstfield'), $.i18n._('Secondfield')];
     this._value = ['', ''];
     this._items = ['1/2', '1/3', '2/3'];
     this._option = "1/2";
@@ -522,6 +538,38 @@ var SpiffFormPartsField = function() {
 
     this.get_handle = function() {
         return 'partsfield';
+    };
+
+    this._get_label_html = function(with_colon) {
+        var label = this._label[0] + '/' + this._label[1];
+        if (with_colon || typeof with_colon === 'undefined')
+            return label + ':' + this._get_required_mark_html();
+        else
+            return label + ' ' + this._get_required_mark_html();
+    };
+
+    // Returns DOM for an entry box for editing the element's label.
+    this._get_label_entry = function() {
+        var that = this;
+        var elem = $('<div>\
+                     <label>'+$.i18n._('Label 1')+': <input type="text"/></label>\
+                     <label>'+$.i18n._('Label 2')+': <input type="text"/></label>\
+                     </div>');
+        var input1 = elem.find('input:eq(0)');
+        var input2 = elem.find('input:eq(1)');
+        input1.val(this._label[0]);
+        input2.val(this._label[1]);
+        elem.find('input').bind('keyup mouseup change', function() {
+            that.set_label([input1.val(), input2.val()]);
+        });
+        return elem;
+    };
+
+    this.get_values = function() {
+        var data = {};
+        data[this._label[0]] = this._value[0];
+        data[this._label[1]] = this._value[1];
+        return data;
     };
 
     this.attach = function(div) {
@@ -853,6 +901,10 @@ var SpiffFormButton = function() {
         return 'button';
     };
 
+    this.get_values = function() {
+        return {};
+    };
+
     this.attach = function(div) {
         this._div = div;
         this.update();
@@ -1034,6 +1086,12 @@ var SpiffFormDatePicker = function() {
         elem.append(this._get_required_checkbox());
     };
 
+    this.get_values = function() {
+        var data = {};
+        data[this._label] = this._value.toISOString().split('T')[0];
+        return data;
+    };
+
     this.validate = function() {
         if (this._required && this._value === null) {
             this.set_error($.i18n._('This field is required.'));
@@ -1103,6 +1161,12 @@ var SpiffFormDropdownList = function() {
         var that = this;
         elem.append('<div><label>' + $.i18n._('Options') + ':</label><ul></ul></div>');
         var ul = elem.find('ul');
+        ul.sortable({
+            stop: function(event, ui) {
+                entry_changed();
+                that.update();
+            }
+        });
 
         // Click handler for the delete buttons in the option list.
         function delete_button_clicked() {
@@ -1111,44 +1175,24 @@ var SpiffFormDropdownList = function() {
                 that._items.splice(index, 1);
             $(this).parent().remove();
             that.update();
-            rebuild_default_select_options();
         }
 
         // Handler for 'changed' events from the radio list.
         function entry_changed() {
-            var li = $(this).parent();
-            var index = li.index();
-            var is_last = li.is(':last');
-
             // If all entry boxes are now filled, add another.
-            var empty = ul.find('input:text[value=""]');
+            var empty = ul.find('input:text').filter(function() {
+                return $(this).val() === "";
+            });
             if (empty.length === 0)
                 append_entry('');
 
-            // Was an existing entry changed, or was the last, empty box
-            // changed? (The last entry box may not have a corresponding entry
-            // in our array yet.)
-            if (!is_last) {
-                that._items[index] = $(this).val();
-                that.update();
-            }
-
-            // If the last entry box was cleared, remove the entry
-            // from our internal array, but leave the entry box available.
-            if ($(this).val() === '') {
-                if (index < that._items.length)
-                    that._items.splice(index, 1);
-                that.update();
-            }
-
-            // If the last entry box was filled, update our internal
-            // array, and add another entry box.
-            if (index < that._items.length)
-                that._items[index] = $(this).val();
-            if (index >= that._items.length)
-                that._items.push($(this).val());
+            // Update the UI.
+            that._items = ul.find('input:text').map(function(){
+                return $(this).val();
+            }).get();
+            if (that._items[that._items.length-1] === '')
+                that._items.slice(-1);
             that.update();
-            rebuild_default_select_options();
         }
 
         // Appends one li to the option list.
@@ -1163,17 +1207,7 @@ var SpiffFormDropdownList = function() {
             li.find('input[type=button]').click(delete_button_clicked);
         }
 
-        function rebuild_default_select_options() {
-            var $defaultsContainer = $('#select-defaults');
-            $defaultsContainer.empty();
-            var select = that._get_select_elem();
-            $defaultsContainer.append(select);
-            select.change(function() {
-                that.select($(this).val());
-            });
-        }
-
-        // Create the entries in the radio list.
+        // Create the entries in the dropdown list.
         for (var i = 0, len = this._items.length; i < len || i < 2; i++)
             append_entry(this._items[i]);
         var empty = ul.find('input:text[value=""]');
@@ -1182,8 +1216,12 @@ var SpiffFormDropdownList = function() {
 
         // Initial value.
         elem.append('<div><label>' + $.i18n._('Default') + ':</label></div>');
-        elem.append('<div id="select-defaults">');
-        rebuild_default_select_options();
+        var select = this._get_select_elem();
+        elem.children('div:last').append(select);
+        select.change(function() {
+            that.select($(this).val());
+        });
+
         // Required checkbox.
         elem.append(this._get_required_checkbox());
     };
@@ -1210,6 +1248,12 @@ var SpiffFormDropdownList = function() {
         }
         this.set_error(undefined);
         return true;
+    };
+
+    this.get_values = function() {
+        var data = {};
+        data[this._label] = this._items[this._value ? this._value : 0];
+        return data;
     };
 
     this.serialize = function(serializer) {
@@ -1293,7 +1337,6 @@ var SpiffFormRadioList = function() {
                 that._items.splice(index, 1);
             $(this).parent().remove();
             that.update();
-            rebuild_default_radio_options();
         }
 
         // Handler for 'changed' events from the option list.
@@ -1330,7 +1373,6 @@ var SpiffFormRadioList = function() {
             if (index >= that._items.length)
                 that._items.push($(this).val());
             that.update();
-            rebuild_default_radio_options();
         }
 
         // Appends one li to the option list.
@@ -1345,16 +1387,6 @@ var SpiffFormRadioList = function() {
             li.find('input[type=button]').click(delete_button_clicked);
         }
 
-        function rebuild_default_radio_options() {
-            var $defaultsContainer = $('#radio-defaults');
-            $defaultsContainer.empty();
-            var p = that._get_radio_elem(false);
-            $defaultsContainer.append(p);
-            p.find('input').click(function() {
-                that.select($(this).val());
-            });
-        }
-
         // Create the entries in the option list.
         for (var i = 0, len = this._items.length; i < len || i < 2; i++)
             append_entry(this._items[i]);
@@ -1364,8 +1396,11 @@ var SpiffFormRadioList = function() {
 
         // Initial value.
         elem.append('<div><label>' + $.i18n._('Default') + ':</label></div>');
-        elem.append('<div id="radio-defaults">');
-        rebuild_default_radio_options();
+        var p = this._get_radio_elem(false);
+        elem.children('div:last').append(p);
+        p.find('input').click(function() {
+            that.select($(this).val());
+        });
 
         // Required checkbox.
         elem.append(this._get_required_checkbox());
@@ -1378,7 +1413,8 @@ var SpiffFormRadioList = function() {
 
     this.select = function(radio) {
         this._value = radio;
-        this.update();
+        this._div.find('input[value=' + radio + ']').prop('checked', true);
+        this.validate();
     };
 
     this.validate = function() {
@@ -1750,6 +1786,15 @@ var SpiffForm = function(div) {
         if (has_errors)
             that.set_hint('validationerror');
         return !has_errors;
+    };
+
+    this.get_values = function() {
+        var data = {};
+        this._div.find('li.spiffform-item').each(function() {
+            var obj = $(this).data('obj');
+            $.extend(data, obj.get_values());
+        });
+        return data;
     };
 
     this.serialize = function(serializer) {
