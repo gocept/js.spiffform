@@ -30,6 +30,6 @@ var translation = {
   'Select one': 'Bitte eines auswählen'
 };
 $(document).ready(function() {
-  $.i18n.setDictionary(translation);
+  $.i18n.load(translation);
 });
 
