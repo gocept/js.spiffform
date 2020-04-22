@@ -270,7 +270,7 @@ var SpiffFormElement = function() {
         var elem = $('<div><label>'+$.i18n._('Label')+': <input type="text"/></label></div>');
         var input = elem.find('input');
         input.val(this._label);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that.set_label($(this).val());
         });
         return elem;
@@ -285,7 +285,7 @@ var SpiffFormElement = function() {
                     '</label>' +
                      '</div>');
         elem.find('input').prop('checked', this._required);
-        elem.find('input').click(function(e) {
+        elem.find('input').on('click', function(e) {
             that.set_required($(this).is(':checked'));
         });
         return elem;
@@ -382,7 +382,7 @@ var SpiffFormTitle = function() {
         that._div.append('<span class="spiffform-item-error"></span>');
         var input = that._div.find('input');
         input.val(that._value);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.validate();
         });
@@ -392,7 +392,7 @@ var SpiffFormTitle = function() {
         elem.append('<label>Text: <input type="text"/></label>');
         var input = elem.find('input');
         input.val(this._value);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.update();
         });
@@ -453,7 +453,7 @@ var SpiffFormSubtitle = function() {
         that._div.append('<span class="spiffform-item-error"></span>');
         var input = that._div.find('input');
         input.val(that._value);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.validate();
         });
@@ -463,7 +463,7 @@ var SpiffFormSubtitle = function() {
         elem.append('<label>Text: <input type="text"/></label>');
         var input = elem.find('input');
         input.val(this._value);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.update();
         });
@@ -559,7 +559,7 @@ var SpiffFormPartsField = function() {
         var input2 = elem.find('input:eq(1)');
         input1.val(this._label[0]);
         input2.val(this._label[1]);
-        elem.find('input').bind('keyup mouseup change', function() {
+        elem.find('input').on('keyup mouseup change', function() {
             that.set_label([input1.val(), input2.val()]);
         });
         return elem;
@@ -589,13 +589,13 @@ var SpiffFormPartsField = function() {
         that._div.append('<span class="spiffform-item-error"></span>');
         var first = that._div.find('input[name="firstfield"]');
         first.val(that._value[0]);
-        first.bind('keyup mouseup change', function() {
+        first.on('keyup mouseup change', function() {
             that._value[0] = $(this).val();
             that.validate();
         });
         var last = that._div.find('input[name="secondfield"]');
         last.val(that._value[1]);
-        last.bind('keyup mouseup change', function() {
+        last.on('keyup mouseup change', function() {
             that._value[1] = $(this).val();
             that.validate();
         });
@@ -634,7 +634,7 @@ var SpiffFormPartsField = function() {
         elem.append(this._get_label_entry());
         elem.append(that._get_select_elem());
         var select = elem.find('select');
-        select.change(function() {
+        select.on('change', function() {
             var option = $(this).val();
             that._option = option;
             that._set_fieldsize(option);
@@ -705,7 +705,7 @@ var SpiffFormEntryField = function() {
         that._div.append('<span class="spiffform-item-error"></span>');
         var input = that._div.find('input:text');
         input.val(that._value);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.validate();
         });
@@ -720,7 +720,7 @@ var SpiffFormEntryField = function() {
         elem.append('<label>'+ $.i18n._('Default') + ': <input type="text" name="default"/></label>');
         var input = elem.find('input[name=default]');
         input.val(this._value);
-        input.bind('keyup mouseup change', function() {
+        input.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.update();
         });
@@ -781,7 +781,7 @@ var SpiffFormTextArea = function() {
         that._div.append('<span class="spiffform-item-error"></span>');
         var textarea = that._div.find('textarea');
         textarea.val(that._value);
-        textarea.bind('keyup mouseup change', function() {
+        textarea.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.validate();
         });
@@ -796,7 +796,7 @@ var SpiffFormTextArea = function() {
         elem.append('<div><label>Default: <textarea></texarea></label></div>');
         var textarea = elem.find('textarea');
         textarea.val(this._value);
-        textarea.bind('keyup mouseup change', function() {
+        textarea.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.update();
         });
@@ -865,7 +865,7 @@ var SpiffFormInfoBox = function() {
         elem.append('<div><label>Message: <textarea></texarea></label></div>');
         var textarea = elem.find('textarea');
         textarea.val(this._value);
-        textarea.bind('keyup mouseup change', function() {
+        textarea.on('keyup mouseup change', function() {
             that._value = $(this).val();
             that.update();
         });
@@ -959,7 +959,7 @@ var SpiffFormCheckbox = function() {
         that._div.append('<span class="spiffform-item-error"></span>');
         var checkbox = that._div.find('input');
         checkbox.prop('checked', that._value);
-        checkbox.click(function() {
+        checkbox.on('click', function() {
             that._value = $(this).prop('checked');
             that.validate();
         });
@@ -974,7 +974,7 @@ var SpiffFormCheckbox = function() {
         elem.append('<div><label>Default: <input type="checkbox" name="checkbox"></label></div>');
         var checkbox = elem.find('input[name=checkbox]');
         checkbox.prop('checked', this._value);
-        checkbox.click(function() {
+        checkbox.on('click', function() {
             that._value = $(this).prop('checked');
             that.update();
         });
@@ -1052,7 +1052,7 @@ var SpiffFormDatePicker = function() {
         picker.datepicker('setDate', that._value);
 
         // Bind an event for validating the input.
-        input.bind('change', function() {
+        input.on('change', function() {
             that._value = $(this).datepicker('getDate');
             that.validate();
         });
@@ -1147,7 +1147,7 @@ var SpiffFormDropdownList = function() {
         that._div.find('label').append(that._get_select_elem());
         that._div.append('<span class="spiffform-item-error"></span>');
         var select = that._div.find('select');
-        select.change(function() {
+        select.on('change', function() {
             that.select($(this).val());
             that.validate();
         });
@@ -1203,8 +1203,8 @@ var SpiffFormDropdownList = function() {
             var li = ul.find('li:last');
             var input = li.find('input[type=text]');
             input.val(value);
-            input.bind('keyup mouseup change', entry_changed);
-            li.find('input[type=button]').click(delete_button_clicked);
+            input.on('keyup mouseup change', entry_changed);
+            li.find('input[type=button]').on('click', delete_button_clicked);
         }
 
         // Create the entries in the dropdown list.
@@ -1218,7 +1218,7 @@ var SpiffFormDropdownList = function() {
         elem.append('<div><label>' + $.i18n._('Default') + ':</label></div>');
         var select = this._get_select_elem();
         elem.children('div:last').append(select);
-        select.change(function() {
+        select.on('change', function() {
             that.select($(this).val());
         });
 
@@ -1315,7 +1315,7 @@ var SpiffFormRadioList = function() {
         var p = that._get_radio_elem(true);
         that._div.find('label').append(p);
         that._div.append('<span class="spiffform-item-error"></span>');
-        p.find('input').click(function() {
+        p.find('input').on('click', function() {
             that.select($(this).val());
             that.validate();
         });
@@ -1344,9 +1344,10 @@ var SpiffFormRadioList = function() {
             var li = $(this).parent();
             var index = li.index();
             var is_last = li.is(':last');
-
             // If all entry boxes are now filled, add another.
-            var empty = ul.find('input:text[value=""]');
+            var empty = ul.find('input:text').filter(function() {
+                return $(this).val() === "";
+            });
             if (empty.length === 0)
                 append_entry('');
 
@@ -1383,8 +1384,8 @@ var SpiffFormRadioList = function() {
             var li = ul.find('li:last');
             var input = li.find('input[type=text]');
             input.val(value);
-            input.bind('keyup mouseup change', entry_changed);
-            li.find('input[type=button]').click(delete_button_clicked);
+            input.on('keyup mouseup change', entry_changed);
+            li.find('input[type=button]').on('click', delete_button_clicked);
         }
 
         // Create the entries in the option list.
@@ -1398,7 +1399,7 @@ var SpiffFormRadioList = function() {
         elem.append('<div><label>' + $.i18n._('Default') + ':</label></div>');
         var p = this._get_radio_elem(false);
         elem.children('div:last').append(p);
-        p.find('input').click(function() {
+        p.find('input').on('click', function() {
             that.select($(this).val());
         });
 
@@ -1547,7 +1548,7 @@ var SpiffForm = function(div) {
         var elem = this._div.find('.spiffform-buttons');
         if (buttons == 'submit') {
             buttons = $('<input type="submit"/>');
-            buttons.click(function() {
+            buttons.on('click', function() {
                 that.validate();
                 that.trigger('submit');
             });
@@ -1578,9 +1579,9 @@ var SpiffForm = function(div) {
         var elem = $('<li class="spiffform-item spiffform-item-' + handle + '"></li>');
         elem.data('obj', obj);
         obj.attach(elem);
-        elem.click(function(e) {
+        elem.on('click', function(e) {
             if (!$(e.target).is('input,textarea,select'))
-                that._div.find(':focus').blur();
+                that._div.find(':focus').trigger('blur');
             return that.trigger('clicked', [e, obj]);
         });
         return elem;
@@ -1614,7 +1615,7 @@ var SpiffForm = function(div) {
         }
         // Make sure that the element was dropped within this form.
         var target = $(document.elementFromPoint(event.clientX, event.clientY));
-        if (!target.parents().andSelf().filter('.spiffform').length) {
+        if (!target.parents().addBack().filter('.spiffform').length) {
             return;
         }
         // Insert at the appropriate position, or append if this is the first item.
@@ -1686,8 +1687,8 @@ var SpiffForm = function(div) {
         this.set_hint('drag');
         this.set_buttons($(''));
         this._div.addClass('spiffform-editor');
-        this._div.find('.spiffform-item-title input').removeAttr("disabled");
-        this._div.find('.spiffform-item-subtitle input').removeAttr("disabled");
+        this._div.find('.spiffform-item-title input').prop("disabled", false);
+        this._div.find('.spiffform-item-subtitle input').prop("disabled", false);
         this._div.find('.spiffform-item').each(function() {
             var obj = $(this).data('obj');
             obj.set_error(); // Hide validation error messages.
@@ -1695,7 +1696,7 @@ var SpiffForm = function(div) {
 
         // Initialize click events on the dom.
         var cb = function() { that.unselect(); };
-        that._div.click(cb);
+        that._div.on('click', cb);
         that._event_handlers.push([that._div, 'click', cb]);
         cb = function(e, obj) {
             that.select(obj);
@@ -1743,7 +1744,7 @@ var SpiffForm = function(div) {
                 return;
             }
         };
-        $(document).keydown(cb);
+        $(document).on('keydown', cb);
         that._event_handlers.push([$(document), 'keydown', cb]);
 
         // Make form sortable.

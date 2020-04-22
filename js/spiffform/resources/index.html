@@ -47,7 +47,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#editable').click(function() {
+    $('#editable').on('click', function() {
         if ($(this).is(':checked')) {
             $('#sidebar-elements').slideDown("slow");
             form.make_editable();
@@ -58,11 +58,11 @@ $(document).ready(function() {
         }
     });
 
-    $('#serialize').click(function() {
+    $('#serialize').on('click', function() {
         alert(form.serialize(SpiffFormJSONSerializer));
     });
 
-    $('#serialize-deserialize').click(function() {
+    $('#serialize-deserialize').on('click', function() {
         form.deserialize(SpiffFormJSONSerializer, form.serialize(SpiffFormJSONSerializer));
     });
 });
