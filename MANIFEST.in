@@ -1,5 +1,15 @@
-recursive-include js/spiffform/resources *.js *.css *.txt *.png
-include *.txt *.cfg
-include js/spiffform/test_spiffform.txt
+include *.rst
+include *.txt
 
+include .isort.cfg
+exclude .isort.cfg
+include .pre-commit-config.yaml
+exclude .pre-commit-config.yaml
 
+include buildout.cfg
+recursive-include js *.css
+recursive-include js *.html
+recursive-include js *.js
+recursive-include js *.md
+recursive-include js *.png
+recursive-include js *.txt

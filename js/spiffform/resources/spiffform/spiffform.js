@@ -1609,7 +1609,7 @@ var SpiffForm = function(div) {
             throw new Error('object is required argument');
 
         // Check if we have the needed property
-        if (!event.hasOwnProperty('clientX') && 
+        if (!event.hasOwnProperty('clientX') &&
             !event.hasOwnProperty('clientY')) {
           event = event.originalEvent;
         }

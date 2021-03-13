@@ -1,5 +1,7 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
 import os
+
 
 version = '1.3.3.dev0'
 
@@ -7,12 +9,13 @@ version = '1.3.3.dev0'
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
+
 long_description = (
-    read('README.txt')
+    read('README.rst')
     + '\n' +
     read('js', 'spiffform', 'test_spiffform.txt')
     + '\n' +
-    read('CHANGES.txt'))
+    read('CHANGES.rst'))
 
 setup(
     name='js.spiffform',
@@ -33,10 +36,10 @@ setup(
         'setuptools',
         'js.jquery',
         'js.jqueryui',
-        ],
+    ],
     entry_points={
         'fanstatic.libraries': [
             'js.spiffform = js.spiffform:library',
-            ],
-        },
-    )
+        ],
+    },
+)

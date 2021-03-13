@@ -1,6 +1,8 @@
-from fanstatic import Library, Resource
+from fanstatic import Library
+from fanstatic import Resource
 import js.jquery
 import js.jqueryui
+
 
 library = Library('spiffform', 'resources')
 
@@ -17,7 +19,7 @@ spiffform_default_css = Resource(library, 'default.css',
 spiffform_css = Resource(library, 'spiffform/res/spiffform.css',
                          depends=[])
 
-#i18n DE
+# i18n DE
 spiffform_de = Resource(library, 'spiffform/spiffform-de.js',
                         depends=[spiffform, i18n,
                                  js.jqueryui.ui_datepicker_de])
