@@ -19,7 +19,7 @@ We use git `subtree`_ to get SpiffForm.
 .. _`subtree`: https://help.github.com/articles/working-with-subtree-merge
 
 How::
-    
+
     $ git remote add -f spiffform https://github.com/lugensa/SpiffForm.git
     $ git merge -s ours --no-commit spiffform/master
     $ git read-tree --prefix=js/spiffform/resources/ -u spiffform/master
@@ -27,5 +27,5 @@ How::
 
 Pull changes::
 
-    $ git pull -s subtree #this only works if we use not nested prefix name 
+    $ git pull -s subtree #this only works if we use not nested prefix name
     $ git pull --squash -s subtree https://github.com/lugensa/SpiffForm.git master

@@ -32,4 +32,3 @@ var translation = {
 $(document).ready(function() {
   $.i18n.load(translation);
 });
-
